@@ -6,6 +6,14 @@ class QuizResults extends Component {
 
   state = {};
 
+  async componentDidMount() {
+    const { history } = this.props;
+
+    if (this.context.currentUser.username === null) {
+      history.push("/");
+    }
+  }
+
   render() {
     return (
       <React.Fragment>
