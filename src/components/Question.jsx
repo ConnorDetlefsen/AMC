@@ -68,6 +68,10 @@ class Question extends Component {
       history.push("/");
     }
 
+    if (this.context.currentUser.completed_quiz === true) {
+      history.push("/results");
+    }
+
     http.get(config.apiEndpoint + "/quiz/").then((res) => {
       console.log(res.data);
       this.shuffle(res.data);

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 
 class QuizOver extends Component {
   state = {};
+
   render() {
     return (
       <React.Fragment>

@@ -8,6 +8,7 @@ import Login from "./components/Login";
 import Password from "./components/QuizPassword";
 import QuizOver from "./components/QuizOver";
 import FreeResponse from "./components/FreeResponse";
+import Results from "./components/QuizResults";
 
 import { UserContext } from "./Context/UserContext";
 
@@ -21,6 +22,7 @@ class App extends Component {
       ID: null,
       Section_id: null,
       Quiz_id: null,
+      completed_quiz: null,
     },
   };
   /*
@@ -53,6 +55,7 @@ class App extends Component {
               <Route path="/passwords" component={Password} />
               <Route path="/quizover" component={QuizOver} />
               <Route path="/freeresponse" component={FreeResponse} />
+              <Route path="/results" exact component={Results} />
               <Route path="/" exact component={Login} />
             </Switch>
           </body>

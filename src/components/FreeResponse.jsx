@@ -18,7 +18,11 @@ class FreeResponse extends Component {
 
       answer: "",
 
+      quizover: false,
+
       ReRender: false,
+
+      user: [],
     };
 
     this.nextQuestion = this.nextQuestion.bind(this);
@@ -56,6 +60,10 @@ class FreeResponse extends Component {
       history.push("/");
     }
 
+    if (this.context.currentUser.completed_quiz === true) {
+      history.push("/");
+    }
+
     http.get(config.apiEndpoint + "/free_response_question/").then((res) => {
       console.log(res.data);
       this.shuffle(res.data);
@@ -70,6 +78,13 @@ class FreeResponse extends Component {
         console.log(this.state.TotalQuestions);
       }
     });
+
+    http
+      .get(config.apiEndpoint + "/user/" + this.context.currentUser.ID)
+      .then((res) => {
+        this.setState({ user: res.data });
+        this.ReRender();
+      });
   }
 
   nextQuestion = async () => {
@@ -79,6 +94,13 @@ class FreeResponse extends Component {
     if (index === TotalQuestions) {
       toast.success(`Quiz Completed`);
       history.push("/QuizOver");
+
+      this.context.currentUser.completed_quiz = true; //updates the context
+      this.state.user.completed_quiz = true;
+      http.put(
+        config.apiEndpoint + "/user/" + this.context.currentUser.ID,
+        this.state.user
+      );
       return;
     }
 
@@ -134,27 +156,36 @@ class FreeResponse extends Component {
               </div>
             </div>
           </nav>
-          <div>
-            <h1 className="center">{this.state.Question}</h1>
-            <form onSubmit={this.formSubmit} class="form">
-              <div className="inputGroup">
-                <textarea
-                  onChange={this.handleChange}
-                  className="form-control"
-                  rows="6"
-                  cols="10"
-                  maxLength={920}
-                ></textarea>
-              </div>
-              <button
-                type="submit"
-                className="btn btn-dark float-right"
-                onClick={this.handleSubmit}
-              >
-                Submit
-              </button>
-            </form>
-          </div>
+
+          {this.state.quizover === true && (
+            <div className="centerTest background">
+              <h1>Quiz Completed</h1>
+            </div>
+          )}
+
+          {this.state.quizover === false && (
+            <div>
+              <h1 className="center">{this.state.Question}</h1>
+              <form onSubmit={this.formSubmit} class="form">
+                <div className="inputGroup">
+                  <textarea
+                    onChange={this.handleChange}
+                    className="form-control"
+                    rows="6"
+                    cols="10"
+                    maxLength={920}
+                  ></textarea>
+                </div>
+                <button
+                  type="submit"
+                  className="btn btn-dark float-right"
+                  onClick={this.handleSubmit}
+                >
+                  Submit
+                </button>
+              </form>
+            </div>
+          )}
         </div>
       </React.Fragment>
     );

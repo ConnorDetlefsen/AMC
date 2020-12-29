@@ -101,6 +101,7 @@ class Login extends Component {
       ) {
         this.context.currentUser.username = userList[x].username;
         this.context.currentUser.ID = userList[x].user_id;
+        this.context.currentUser.completed_quiz = userList[x].completed_quiz;
 
         //tracks user log in
         /* http
@@ -116,10 +117,10 @@ class Login extends Component {
         await this.sleep(2000);
 
         history.push("/passwords");
-      } else {
-        toast.error("Username and Password doesn't match");
+        return;
       }
     }
+    toast.error("Username and Password doesn't match");
   };
 
   render() {
